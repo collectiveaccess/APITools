@@ -1,0 +1,710 @@
+{
+	"info": {
+		"_postman_id": "14428053-e7a2-4739-98df-767e8af926d5",
+		"name": "maxwell",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth: get tokens",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"returns expected JSON\", () => {",
+							"    json = pm.response.json()",
+							"    pm.expect(json).to.have.any.keys('data');",
+							"    pm.expect(json.data).to.have.any.keys('login');",
+							"    pm.expect(json.data.login).to.have.any.keys('jwt', 'refresh', 'user');",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "      query {\n        login(username: \"api\", password: \"apitest!\") {\n          jwt,\n          refresh,\n          user {\n            id,\n            fname,\n            lname,\n            email\n          }\n        }\n      }",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{apiUrl}}/Auth",
+					"host": [
+						"{{apiUrl}}"
+					],
+					"path": [
+						"Auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth: refresh jwt token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"returns expected JSON\", () => {",
+							"    json = pm.response.json()",
+							"    pm.expect(json).to.have.any.keys('data');",
+							"    pm.expect(json.data).to.have.any.keys('refresh');",
+							"    pm.expect(json.data.refresh).to.have.any.keys('jwt');",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query($token: String) {\n        refresh(token: $token)\n        {\n                jwt\n        }\n}",
+						"variables": "{\"token\": \"{{refreshToken}}\"}"
+					}
+				},
+				"url": {
+					"raw": "{{apiUrl}}/Auth",
+					"host": [
+						"{{apiUrl}}"
+					],
+					"path": [
+						"Auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit: create authority lists",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"returns expected JSON\", () => {",
+							"    json = pm.response.json()",
+							"    pm.expect(json).to.have.any.keys('data');",
+							"    pm.expect(json.data).to.have.any.keys('add');",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\n        add(\n            table: \"ca_lists\",\n            existingRecordPolicy:\"SKIP\",\n            records:[\n                {\n                    idno: \"l.1.2\",\n                    bundles: [\n                        { name: \"preferred_labels\", value: \"list item 1.2\"},\n                \n                    ]\n                } ,\n                                {\n                    idno: \"l.2.2\",\n                    bundles: [\n\n                        { name: \"preferred_labels\", value: \"list item 2.2\"}\n\n                    ]\n                } \n             ]\n        ) {\n            id,\n            table,\n            idno,\n            changed,\n            errors {code, message, bundle},\n            warnings { message, bundle}\n        }\n    }",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{apiUrl}}/Edit",
+					"host": [
+						"{{apiUrl}}"
+					],
+					"path": [
+						"Edit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit: create entity individual",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"returns expected JSON\", () => {",
+							"    json = pm.response.json()",
+							"    pm.expect(json).to.have.any.keys('data');",
+							"    pm.expect(json.data).to.have.any.keys('add');",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\n    add(\n        table: \"ca_entities\",\n        idno: \"abcd\",\n        type: \"ind\",\n        bundles: [\n            { name: \"preferred_labels\", values: [\n                { name: \"forename\", value: \"Forename\" },\n                { name: \"surname\", value: \"Surname\" },\n                { name: \"middlename\", value: \"Middle Name\" },\n                { name: \"prefix\", value: \"Prefix\" },\n                { name: \"suffix\", value: \"Suffix\" },\n                { name: \"other_forenames\", value: \"Other Forenames\" },\n                { name: \"display_name\", value: \"Dear Name\" }\n            ]},\n            { name: \"address\", values: [\n                { name: \"address_line_1\", value: \"Address Line 1\" },\n                { name: \"address_line_2\", value: \"Address Line 2\" },\n                { name: \"city\", value: \"City\" },\n                { name: \"state\", value: \"State/Province\" },\n                { name: \"postal_code\", value: \"Postal/Zip Code\" },\n                { name: \"country\", value: \"Country\" },\n                { name: \"type\", value: \"current\"},\n            ]},\n            { name: \"cont_entity_dts\", values: [\n                { name: \"date_of_birth\", value: \"Date of Birth\" },\n                { name: \"date_of_death\", value: \"Date of Death\" },\n                { name: \"active_dates\", value: \"Active Dates\"}\n            ]},\n            { name: \"email\", value: \"Email 1\" },\n            { name: \"email\", value: \"Email 2\" },\n            { name: \"telephone\", value: \"Phone 1\" },\n            { name: \"telephone\", value: \"Phone 2\" },\n            { name: \"telephone\", value: \"Phone 3\" },\n            { name: \"txt_object_comments\", value: \"Comments\" },\n            { name: \"txt_biography\", value: \"Biography\" },\n            { name: \"affiliation\", value: \"Affiliation\"},\n            { name: \"role\", value: \"author\"},\n            { name: \"website\", value: \"Website\"}\n        ]\n    ) {\n        id,\n        table,\n        idno,\n        changed,\n        errors { code, message, bundle },\n        warnings { message, bundle }\n    }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{apiUrl}}/Edit",
+					"host": [
+						"{{apiUrl}}"
+					],
+					"path": [
+						"Edit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit: create storage location",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"returns expected JSON\", () => {",
+							"    json = pm.response.json()",
+							"    pm.expect(json).to.have.any.keys('data');",
+							"    pm.expect(json.data).to.have.any.keys('add');",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\n    add(\n        table: \"ca_storage_locations\",\n        insertMode: \"HIERARCHICAL\",\n        existingRecordPolicy:\"SKIP\",\n        ignoreType: true,\n        records: [\n            {\n                idno: \"999\",\n                type: \"building\",\n                bundles: [\n                    {name: \"preferred_labels\", value: \"Acme\"},\n                    {name: \"description\", value: \"\"},\n                ],\n            },\n            {\n                idno: \"c76e11c5b3ae2eba23f7b9aefdc6a55f\",\n                type: \"room\",\n                bundles: [\n                    {name: \"preferred_labels\", value: \"B3\"},\n                    {name: \"internal_notes\", value: \"\"},\n                ],\n            },\n        ]\n    )\n    {\n        id,\n        table,\n        idno,\n        changed,\n        errors { code, message, bundle },\n        warnings { message, bundle }\n    }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{apiUrl}}/Edit",
+					"host": [
+						"{{apiUrl}}"
+					],
+					"path": [
+						"Edit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit: delete entity",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"returns expected JSON\", () => {",
+							"    json = pm.response.json()",
+							"    pm.expect(json).to.have.any.keys('data');",
+							"    pm.expect(json.data).to.have.any.keys('delete');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "        mutation {\n            delete(\n                    table: \"ca_entities\",\n                    identifier: \"28\"\n            ) { \n                    id\n                    table,\n                    idno,\n                    changed,\n                    errors {code, message, bundle},\n                    warnings { message, bundle}\n            }\n        }",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{apiUrl}}/Edit",
+					"host": [
+						"{{apiUrl}}"
+					],
+					"path": [
+						"Edit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Item: object",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"returns expected JSON\", () => {",
+							"    json = pm.response.json()",
+							"    pm.expect(json).to.have.any.keys('data');",
+							"    pm.expect(json.data).to.have.any.keys('get');",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "    query {\n            get(\n                    table: \"ca_objects\",\n                    identifier: \"test.1\",\n                    bundles: [\"ca_objects.idno\", \"ca_objects.type_id\", \"ca_objects.preferred_labels.name\", \"ca_objects.nonpreferred_labels\", \"ca_objects.description\"]\n    ) {\n            id,\n            table,\n            idno,\n            bundles {\n                    name,\n                    code,\n                    dataType,\n                    values {\n                            locale,\n                            value,\n                            subvalues {\n                                    code,\n                                    value,\n                                    dataType\n                            }\n                    }\n            }\n    }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{apiUrl}}/Item",
+					"host": [
+						"{{apiUrl}}"
+					],
+					"path": [
+						"Item"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Item: object relationship",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"returns expected JSON\", () => {",
+							"    json = pm.response.json()",
+							"    pm.expect(json).to.have.any.keys('data');",
+							"    pm.expect(json.data).to.have.any.keys('getRelationships');",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query {\n        getRelationships(\n                table: \"ca_objects\",\n                identifier: \"test.1\",\n                target:\"ca_entities\",\n                bundles: [\n                        \"ca_entities.preferred_labels.displayname\", \"ca_entities.txt_biography\"], restrictToRelationshipTypes: [\"donor\"]\n        ) {\n                id,\n                table,\n                idno,\n                relationships {\n                        id,\n                        table,\n                        bundles {\n                                name,\n                                code,\n                                dataType,\n                                values {\n                                        id,\n                                        value_id,\n                                        locale,\n                                        value,\n                                        subvalues {\n                                                id,\n                                                code,\n                                                value,\n                                                dataType\n                                        }\n                                }\n                        }\n                }\n        }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{apiUrl}}/Item",
+					"host": [
+						"{{apiUrl}}"
+					],
+					"path": [
+						"Item"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Item: storage location",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"returns expected JSON\", () => {",
+							"    json = pm.response.json()",
+							"    pm.expect(json).to.have.any.keys('data');",
+							"    pm.expect(json.data).to.have.any.keys('get');",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query {\n        get(\n                    table: \"ca_storage_locations\",\n                    identifier: \"f8d63912edcb48d15b942549f0ae5b95\",\n                    bundles: [\"ca_storage_locations.internal_notes\"]\n        ) {\n            id,\n            table,\n            idno,\n            bundles {\n                    name,\n                    code,\n                    dataType,\n                    values {\n                            locale,\n                            value,\n                            subvalues {\n                                    code,\n                                    value,\n                                    dataType\n                            }\n                    }\n            }\n        }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{apiUrl}}/Item",
+					"host": [
+						"{{apiUrl}}"
+					],
+					"path": [
+						"Item"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Item: storage location relationship",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"returns expected JSON\", () => {",
+							"    json = pm.response.json()",
+							"    pm.expect(json).to.have.any.keys('data');",
+							"    pm.expect(json.data).to.have.any.keys('getRelationships');",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query {\n        getRelationships(\n                table: \"ca_storage_locations\",\n                identifier: \"f8d63912edcb48d15b942549f0ae5b95\",\n                target:\"ca_storage_locations\",\n                bundles: [\n                        \"ca_storage_locations.nonpreferred_labels.name\"],  \n        ) {\n                id,\n                table,\n                idno,\n                 \n                relationships {\n                        id,\n                        table,\n                        bundles {\n                                name,\n                                code,\n                                dataType,\n                                values {\n                                        id,\n                                        value_id,\n                                        locale,\n                                        value,\n                                        subvalues {\n                                                id,\n                                                code,\n                                                value,\n                                                dataType\n                                        }\n                                }\n                        }\n                }\n        }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{apiUrl}}/Item",
+					"host": [
+						"{{apiUrl}}"
+					],
+					"path": [
+						"Item"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Schema: get tables",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"returns expected JSON\", () => {",
+							"    json = pm.response.json()",
+							"    pm.expect(json).to.have.any.keys('data');",
+							"    pm.expect(json.data).to.have.any.keys('tables');",
+							"    pm.expect(json.data.tables).to.have.any.keys('tables');",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "          query {\n            tables {\n              tables {\n                name,\n                code,\n                types {\n                  name,\n                  code\n                }\n              }\n            }\n          }",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{apiUrl}}/Schema",
+					"host": [
+						"{{apiUrl}}"
+					],
+					"path": [
+						"Schema"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search: objects",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"returns expected JSON\", () => {",
+							"    json = pm.response.json()",
+							"    pm.expect(json).to.have.any.keys('data');",
+							"    pm.expect(json.data).to.have.any.keys('search');",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query {\n        search(\n                table: \"ca_objects\",\n                search: \"first\",\n                bundles: [\"ca_objects.idno\", \"ca_objects.preferred_labels.name\", \"ca_objects.description\"],\n                start: 0,\n                limit: 10\n        ) {\n                table,\n                search,\n                count,\n                results {\n                        id,\n                        table,\n                        idno,\n                        bundles {\n                                name,\n                                values {\n                                        value,\n                                        locale\n                                }\n                        }\n                }\n        }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{apiUrl}}/Search",
+					"host": [
+						"{{apiUrl}}"
+					],
+					"path": [
+						"Search"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwtToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// https://vmsdurano.com/automating-access-token-generation-with-postman/",
+					"",
+					"require(\"crypto-js\");",
+					"",
+					"let now = Date.now() / 1000;",
+					"let domain = pm.environment.get(\"domain\");",
+					"let apiUsername = pm.environment.get(\"apiUsername\");",
+					"let apiPassword = pm.environment.get(\"apiPassword\");",
+					"let authUrl = pm.variables.get(\"apiUrl\") + '/Auth'",
+					"let jwtExpiresAt = pm.environment.get(\"jwtExpiresAt\");",
+					"let refreshExpiresAt = pm.environment.get(\"refreshExpiresAt\");",
+					"let refreshToken = pm.environment.get(\"refreshToken\");",
+					"",
+					"",
+					"if (jwtExpiresAt && refreshExpiresAt) {",
+					"  // jwt is expired",
+					"  if (jwtExpiresAt < now) {",
+					"    // refresh is expired",
+					"    if (refreshExpiresAt < now) {",
+					"      fetchTokens();",
+					"    // refresh not expired",
+					"    } else {",
+					"      refreshJwt(refreshToken);",
+					"    }",
+					"  }",
+					"} else {",
+					"  fetchTokens();",
+					"}",
+					"",
+					"function refreshJwt(refreshToken) {",
+					"  console.log('refreshJwt...')",
+					"  let query = `",
+					"    {",
+					"      refresh(token: \"${refreshToken}\") {",
+					"        jwt",
+					"      }",
+					"    }",
+					"  `;",
+					"  pm.sendRequest(",
+					"    {",
+					"      url: authUrl,",
+					"      method: \"POST\",",
+					"      header: {",
+					"        'Accept': 'application/json',",
+					"      },",
+					"      body: JSON.stringify({query: query})",
+					"    },",
+					"    function(error, response) {",
+					"      let jwt = response.json().data.refresh.jwt;",
+					"      let jwtData = decodeToken(jwt);",
+					"      if (jwtData.iss !== domain || jwtData.aud !== domain) {",
+					"        throw new Error(\"Invalid JWT\");",
+					"      }",
+					"",
+					"      pm.environment.set(\"jwtToken\", jwt);",
+					"      pm.environment.set(\"jwtExpiresAt\", jwtData.exp);",
+					"    }",
+					"  );",
+					"}",
+					"",
+					"function decodeToken(token) {",
+					"  parts = token.split(\".\");",
+					"  var parsed = CryptoJS.enc.Base64.parse(parts[1]);",
+					"  return JSON.parse(CryptoJS.enc.Utf8.stringify(parsed));",
+					"}",
+					"",
+					"function fetchTokens() {",
+					"  console.log('fetchTokens...')",
+					"  let query = `",
+					"    {",
+					"      login(username: \"${apiUsername}\", password: \"${apiPassword}\") {",
+					"        jwt,",
+					"        refresh,",
+					"        user {",
+					"          id,",
+					"          fname,",
+					"          lname,",
+					"          email",
+					"        }",
+					"      }",
+					"    }",
+					"  `;",
+					"  pm.sendRequest(",
+					"    {",
+					"      url: authUrl,",
+					"      method: \"POST\",",
+					"      header: {",
+					"        'Accept': 'application/json',",
+					"      },",
+					"      body: JSON.stringify({query: query})",
+					"    },",
+					"    function(error, response) {",
+					"      let jwt = response.json().data.login.jwt;",
+					"      let jwtData = decodeToken(jwt);",
+					"      if (jwtData.iss !== domain || jwtData.aud !== domain) {",
+					"        throw new Error(\"Invalid JWT\");",
+					"      }",
+					"",
+					"      let refresh = response.json().data.login.refresh;",
+					"      let refreshData = decodeToken(refresh);",
+					"      if (refreshData.iss !== domain || refreshData.aud !== domain) {",
+					"        throw new Error(\"Invalid Refresh token\");",
+					"      }",
+					"",
+					"      pm.environment.set(\"jwtToken\", jwt);",
+					"      pm.environment.set(\"refreshToken\", refresh);",
+					"      pm.environment.set(\"jwtExpiresAt\", jwtData.exp);",
+					"      pm.environment.set(\"refreshExpiresAt\", refreshData.exp);",
+					"    }",
+					"  );",
+					"}",
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.test(\"response should be okay to process\", function () {",
+					"     pm.response.to.be.json;",
+					"});"
+				]
+			}
+		}
+	]
+}
