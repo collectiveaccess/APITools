@@ -1,6 +1,6 @@
 # CollectiveAccess API Tests for Postman 
 
-This collection of queries and mutations can be used to explore and test the [CollectiveAccess GraphQL API] (https://manual.collectiveaccess.org/developer/web_api/graphql.html) using [Postman](https://www.postman.com).
+This collection of queries and mutations can be used to explore and test the [CollectiveAccess GraphQL API](https://manual.collectiveaccess.org/developer/web_api/graphql.html) using [Postman](https://www.postman.com).
 
 To get started, install Postman and import the `collectiveaccess.postman_collection.json` file. Next, create a new environment in Postman and add the following environment variables:
 
