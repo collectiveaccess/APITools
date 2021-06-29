@@ -16,3 +16,9 @@ To get started, install Postman and import the `collectiveaccess.postman_collect
 | refreshToken     | Current refresh token    | &lt;Leave initial value blank&gt;    
 
 The `domain`, `apiUrl`, `apiUsername` and `apiPassword` variables must be set to valid values for your CollectiveAccess instance. The login used for authentication must have privileges to use the GraphQL API associated with it.
+
+The Postman collection includes the following features:
+
+* Automatic refresh of tokens
+* Basic testing of API responses
+* A (soon to be) full set of API query and mutation examples
